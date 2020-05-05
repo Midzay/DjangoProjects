@@ -1,0 +1,161 @@
+{% load my_filters %}
+{% load staticfiles %}
+
+{% if form.errors %}
+    <div class="alert alert-danger"> {{ form.errors }}</div>
+{% endif %}
+{% if check %}
+    <div class="alert alert-danger"> Свидетельство с таким номером уже существует</div>
+{% endif %}
+
+
+<div class="container">
+
+    <div class="form-row">
+
+        <div class="form-group col-lg-3">
+            <label for="id_fio_worker">Имя работника</label>
+            {{ form.fio_worker }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_name_type">Наименовение,тип СИ </label>
+            {{ form.name_type }}
+        </div>
+        <div class="form-group col-lg-2">
+            <label for="dateOne">Дата поверки</label>
+            <input type="Date" name="date" value="{{ con.date|date:"Y-m-d" }}" class="form-control" required=""
+                   id="dateOne">
+        </div>
+        <div class="form-group col-lg-1">
+            <label for="id_interval">След</label>
+            {{ form.interval }}
+        </div>
+
+
+        <div class="form-group col-lg-3">
+            <label for="id_method">Методика </label>
+            {{ form.method }}
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-lg-3">
+            <label for="dateTwo">Срок окончания поверки </label>
+            <input type="Date" name="date_end_powerka" value="{{ con.date_end_powerka|date:"Y-m-d" }}"
+                   class="form-control" required="" id="dateTwo">
+
+        </div>
+
+        <div class="form-group col-lg-3">
+            <label for="id_num_gos_reestr">№ гос. реестра </label>
+            {{ form.num_gos_reestr }}
+        </div>
+
+        <div class="form-group col-lg-1">
+            <label for="id_view_svidet">Серия св. </label>
+            {{ form.view_svidet }}
+        </div>
+
+        <div class="form-group col-lg-2">
+            <label for="id_num_svidet_powerka">№ св-ва о поверке </label>
+            {{ form.num_svidet_powerka }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_etalon">Используемый эталон </label>
+            {{ form.etalon }}
+        </div>
+    </div>
+
+
+    <div class="form-row">
+
+        <div class="form-group col-lg-3">
+            <label for="id_city">Город</label>
+            {{ form.city }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_num_fabric">Заводской номер </label>
+            {{ form.num_fabric }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_result_powerka">Результат поверки</label>
+            {{ form.result_powerka }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_plomba">Наличие пломбы</label>
+            {{ form.plomba }}
+        </div>
+    </div>
+
+
+    <div class="form-row">
+
+        <div class="form-group col-lg-3">
+            <label for="id_city">Адрес</label>
+            {{ form.adress }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_num_fabric">Место расположения счетчика </label>
+            {{ form.place }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_result_powerka">Вода</label>
+            {{ form.hot_water }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_plomba">Номер телефона</label>
+            {{ form.num_telephone }}
+        </div>
+    </div>
+
+    <div class="form-row">
+
+        <div class="form-group col-lg-3">
+            <label for="id_city">ФИО клиента</label>
+            {{ form.fio_client }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_num_fabric">Показания счетчика </label>
+            {{ form.pokazaniya }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_result_powerka">Qh </label>
+            {{ form.qh }}
+        </div>
+        {% if amp_boolean %}
+            <div class="form-group col-lg-3">
+                <label for="id_result_powerka">№ АМП </label>
+                {{ form.amp_filed }}
+            </div>
+            </div>
+            <div class="form-row justify-content-end">
+                <div class="form-group col-lg-3 align-self-end">
+                    <input class="btn btn-primary btn-lg btn-block " type="submit"
+                           value="Исправить"/>
+                </div>
+            </div>
+        {% else %}
+            <div class="form-group col-lg-3 align-self-end">
+                <input class="btn btn-primary btn-lg btn-block " type="submit"
+                       value="Исправить"/>
+            </div>
+            </div>
+        {% endif %}
+
+<div class="form-row">
+    <div class="form-group col-lg-3 align-self-end d-lg-block d-none">
+        <a href="{% url 'protocol' num_id=con.id %}" class="btn btn-primary btn-block ">Сформировать
+            протокл</a>
+    </div>
+
+    <div class="form-group col-lg-3 align-self-end d-block d-sm-none">
+        <a href="{% url 'getRowsForMobile' date_row=con.date %}" class="btn btn-primary btn-block ">Назад </a>
+    </div>
+
+    <div class="row justify-content-end">
+        <div class="col">
+            <a href="{% url 'del_data' num_id=con.id %}" onclick="return proverka();"
+               class="btn btn-danger ">Удалить</a>
+        </div>
+    </div>
+</div>

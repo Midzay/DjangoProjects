@@ -1,0 +1,32 @@
+{% extends 'includes/base.html' %}
+{% load my_filters %}
+{% load staticfiles %}
+{% block content %}
+    {% if user.is_authenticated %}
+
+
+
+
+        <div class="d-block d-lg-none">
+
+            {% include "partitions/body/main/mobile.html" %}
+
+        </div>
+
+        <div class="d-lg-block d-none ">
+
+            {% include "partitions/body/main/browser.html" %}
+            </form>
+        </div>
+
+
+
+
+    {% else %}
+        Вам необходимо войти в систему
+    {% endif %}
+{% endblock content %}
+
+
+
+

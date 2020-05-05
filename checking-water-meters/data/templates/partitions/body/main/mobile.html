@@ -1,0 +1,74 @@
+{% load my_filters %}
+{% load staticfiles %}
+
+<form method="POST" >
+    {% csrf_token %}
+    <div class="container">
+        <div class="form-row ">
+
+            <div class="col-6 ">
+                <input type="date" class="form-control" name="date" placeholder="дата" style="margin:3px;">
+            </div>
+            <div class="col-6 ">
+                <input type="text" class="form-control" name="num_svidet_powerka" placeholder="Номер свид" size="15"
+                       style="margin:3px">
+            </div>
+            <div class="col ">
+                <input type="text" class="form-control " name="num_fabric" placeholder="Зав №" size="15"
+                       style="margin:3px">
+            </div>
+        </div>
+        <div class="form-row mt-2">
+            <div class="col"><input class="btn btn-secondary btn-block " type="submit" name="find_mobile"
+                                    value="Найти">
+
+            </div>
+            <div class="col"><a class="btn btn-secondary  btn-block" href="{% url 'create_data' %}">
+                Добавить
+            </a>
+
+            </div>
+        </div></div>
+</form>
+
+
+<div class="container">
+    <div class="row">
+        <div class="table-responsive-lg">
+            <table class="table text-center">
+            <tr><td colspan="2">{{ month_from_dict }}</td></tr>
+                <tr>
+                    <th scope="col">Дата поверки</th>
+                    <th scope="col">Кол-во счетчиков</th>
+
+                </tr>
+                {% for rec in mobail_main.object_list %}
+                    <tr>
+                        <td><a href="{% url 'getRowsForMobile' date_row=rec.date %}"
+                               class="">{{ rec.date|date:"d.m.Y" }}</a></td>
+                        <td>{{ rec.result_powerka }}/{{ rec.my_count_date|subtract:rec.result_powerka }}  </td>
+                    </tr>
+
+                {% endfor %}
+                <tr><td>Итого {{ allday }} дн.</td>
+                <td>{{good_powerka }} / {{ bad_powerka }} </td></tr>
+            </table>
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <input type="hidden" name="curMon" value="{{ curMon }}">
+                    <div class="col"><input class="btn btn-primary btn-block " type="submit" name="pred"
+                                            value="Пред"></div>
+
+                    <div class="col"><input class="btn btn-primary btn-block " type="submit" name="next"
+                                            value="След">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <a class="navbar-brand mt-5" href="{% url 'logout' %}">
+        <button type="button" class="btn btn-secondary">Выйти</button>
+    </a>
+</div>

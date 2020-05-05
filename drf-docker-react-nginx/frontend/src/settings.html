@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+         * {
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    .settings{
+        width: 1000px;
+        margin: 10px auto;
+        min-height: 100px;
+        border: 1px solid;
+    }
+    .mail, .celery{
+        width: 450px;
+        display: inline-block;
+
+    }
+    .settings-row{
+        margin:4px;
+        text-align: center;
+        width: 380px;
+    }
+    .label{
+        width: 150px;
+        margin-right: 10px;
+        display: inline-block;
+        
+        text-align: right;
+    }
+    button{
+        margin:10px auto;
+    }
+</style>
+</head>
+<body>
+    <div class="settings">
+        <fieldset>
+             <legend>Настройка</legend>
+             <fieldset class="mail">
+                 <legend>Почта</legend>
+                 <form >
+                    <div class="settings-row">     
+                <label for="emailid" class="label">Введите Email</label>
+                 <input type="text" name="email" placeholder="Введите Email" id="emailid">    
+                </div>
+                <div class="settings-row">
+                 <label for="passid" class="label">Введите пароль</label>
+                 <input type="password" name="password" placeholder="Введите пароль" id="passid">    
+                </div>
+                <div class="settings-row">
+                    <button type="submit">Сохранить</button>
+                </div>
+                 </form>
+             </fieldset>
+             <fieldset class="celery">
+                <legend>Уведомления</legend>
+                <form >
+                    <div class="settings-row">     
+                <label for="emailid" class="label">Когда отправлять</label>
+                 <input type="text" name="email" placeholder="Время для уведомлений" id="emailid">    
+                </div>
+                <div class="settings-row">
+                 <label for="passid" class="label">Электронная почта</label>
+                 <input type="text" name="password" placeholder="Почта для уведомлений" id="passid">    
+                </div>
+                <div class="settings-row">
+                    <button type="submit">Сохранить</button>
+                </div>
+                 </form>
+            </fieldset>
+            
+
+
+        </fieldset>
+
+
+    </div>
+    
+</body>
+</html>

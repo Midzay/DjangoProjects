@@ -1,0 +1,127 @@
+{% extends 'includes/base.html' %}
+{% block content %}
+    <div id="app">
+        <form method='post'>
+            {% if form.errors %}
+                <div class="alert alert-danger"> {{ form.errors }}</div>
+            {% endif %}
+            {% csrf_token %}
+
+            {% comment %} <input type="hidden" name="fio_worker" value={{user.last_name}}>  {% endcomment %}
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <table class=" ml-3 mt-4 " cellpadding="10">
+                        <tr>
+                            <td width=25%>Имя работника <input type="text" class="form-control" name="fio_worker"
+                                                               maxlength="150" value="{{ user.last_name }}" required
+                                                               id="id_fio_worker" readonly="true"></td>
+                            </td>
+                            <td>Наименовение,тип СИ {{ form.name_type }} </td>
+                            <td>Срок окончания поверки<input class="form-control " type="date"
+                                                             name="date_end_powerka" id="dateTwo">
+                            </td>
+                            <td width=25%>Методика {{ form.method }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td>Дата</td>
+                                        <td>Следущая через:</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input class="form-control" type="date" name="date" id="dateOne">
+                                        </td>
+                                        <td>
+                                            <select class="form-control" name="town" id="addYear"
+                                                    onchange="getNewDate()">
+                                                <option value="0" selected></option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>№ гос. реестра {{ form.num_gos_reestr }} </td>
+
+                            <td width=25%>
+                                <table>
+                                    <tr>
+                                        <td width="40%">Серия свидет.</td>
+                                        <td>№ св-ва о поверке</td>
+                                    </tr>
+                                    <tr>{% if view_svidet %}
+                                        <td>
+                                            <select name="view_svidet" class="form-control" id="id_view_svidet">
+                                                <option value="{{ view_svidet.id }}"
+                                                        selected="">{{ view_svidet.view_svidet }}</option>
+                                            </select>
+
+                                        </td>
+                                    {% else %}
+                                        <td>{{ form.view_svidet }} </td>
+                                    {% endif %}
+                                        <td>{{ form.num_svidet_powerka }}</td>
+
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="25%">
+                                {% if etalon %}
+                                    <select name="etalon" class="form-control" required="" id="id_etalon">
+                                        <option value="{{ etalon.id }}" selected="">{{etalon.etalon}}</option>
+
+                                    </select>
+                                {% else %}
+                                    Используемый эталон {{ form.etalon }}
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Город {{ form.city }} </td>
+                            <td>Заводской номер {{ form.num_fabric }} </td>
+                            <td>Результат поверки {{ form.result_powerka }} </td>
+                            <td>Наличие пломбы {{ form.plomba }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Адрес {{ form.adress }} </td>
+                            <td>Место расположения счетчика {{ form.place }} </td>
+                            <td>Вода {{ form.hot_water }} </td>
+                            <td>Номер телефона {{ form.num_telephone }} </td>
+
+                        </tr>
+                        <tr>
+                            <td>ФИО клиента {{ form.fio_client }} </td>
+                            <td>Показания счетчика {{ form.pokazaniya }} </td>
+                            <td>Qh {{ form.qh }} </td>
+                            <td rowspan=1 valign="bottom"><input class="btn btn-primary btn-lg btn-block " type="submit"
+                                                                 value="Добавить"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+
+            {% verbatim %}
+
+            <script>
+                function getNewDate() {
+                    let addYear = Number(document.getElementById("addYear").value);
+                    let dataPoverki = new Date(document.getElementById("dateOne").value).getTime();
+                    let newDataPow = new Date(dataPoverki);
+                    newDataPow.setFullYear(newDataPow.getFullYear() + addYear);
+                    newDataPow.setDate(newDataPow.getDate() - 1);
+                    document.getElementById("dateTwo").value = newDataPow.toISOString().split('T')[0];
+                }
+            </script>
+            {% endverbatim %}
+{% endblock content %}

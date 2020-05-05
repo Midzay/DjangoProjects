@@ -1,0 +1,23 @@
+{% extends 'dispatcher/includes/base.html' %}
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <br>
+    <div class="row">
+     <div class="col-md-1"></div>
+
+    <form method="post">
+        <div>
+        <label for="exampleFormControlFile1">Выберете XLS  файл для обновления</label>
+        <input type="file" class="form-control-file"  name="excel_file">
+            </div>
+        <div>
+        <button class="btn btn-primary "
+            value="Добавить">Обновить
+    </button>
+            </div>
+    </form>
+
+</div>
+</form>
+{% endblock content %}

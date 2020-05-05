@@ -1,0 +1,120 @@
+{% extends 'dispatcher/includes/base.html' %}
+{% block content %}
+    {% if user.is_authenticated %}
+        {% load staticfiles %}
+
+        <form method='post' >
+            {% if form.errors %}
+                <div class="alert alert-danger"> {{ form.errors }}</div>
+            {% endif %}
+            {% csrf_token %}
+
+            {% comment %} <input type="hidden" name="fio_worker" value={{user.last_name}}>  {% endcomment %}
+            <div class="row">
+
+                <div class="col-md-12">
+                    <table class=" ml-3 mt-4 " cellpadding="10">
+                        <tr>
+                            <td >Дата установки <input class="form-control mb-2" type="date" name="date" value={{ date }}></td>
+                            <td>Ф.И.О./Наименование{{ form.fio_client }} </td>
+                            <td>Контактный телефон {{ form.phone }} </td>
+                            <td>Адрес{{ form.adress }} </td>
+                            <td>Тип{{ form.name_type }} </td>
+                            <td>Заводской номер{{ form.num_fabric }} </td>
+                        </tr>
+                        <tr>
+                            <td >Текущие показания {{ form.pokazaniya }}</td>
+                            <td>Последнее обновление <input class="form-control mb-2" type="date" name="last_update" value={{ last_update }}> </td>
+                            <td>Вода Х/Г {{ form.hot_water }} </td>
+                            <td>Договор №{{ form.num_dogovor }} </td>
+                            <td colspan="2" valign="bottom"><button class="btn btn-primary btn-lg btn-block "
+                                                                    value="Добавить">Добавить</button></td>
+                        </tr>
+
+                    </table>
+                </div>
+
+            </div>
+        </form>
+
+        </div>
+
+        </div>
+
+
+
+        <table style="align:align-center" class="table m-md-3">
+            <thead class="thead-light">
+            <tr align="center" style="font-size:small">
+
+                <th scope="col">#</th>
+                <th scope="col">Дата установки</th>
+                <th scope="col">Наименование</th>
+                <th scope="col">Телефон</th>
+                <th scope="col">Адрес</th>
+                <th scope="col">Наименование, тип СИ</th>
+                <th scope="col">Заводской номер</th>
+                <th scope="col">Текущие показания</th>
+                <th scope="col">Последнее обновление показаний</th>
+                <th scope="col">Вода Х/Г</th>
+                <th scope="col">Договор №</th>
+            </tr>
+            </thead>
+            <tbody align="center" class="tbody-striped">
+            {% for rec in main.object_list %}
+                {% comment %} {% ifequal rec.fio_worker user.last_name %}   {% endcomment %}
+                <tr>
+
+                    <td>{{ forloop.counter }}</td>
+
+                    <td><a href="{% url 'edit_dispatcher' num_id=rec.id %}" class="">{{ rec.date|date:"d.m.Y" }}</a></td>
+                    <td>{{ rec.fio_client }}</td>
+                    <td>{{ rec.phone }}</td>
+                    <td>{{ rec.adress }}</td>
+                    <td>{{ rec.name_type }}</td>
+                    <td>{{ rec.num_fabric }}</td>
+                    <td>{{ rec.pokazaniya }}</td>
+                    <td>{{ rec.last_update|date:"d.m.Y" }}</td>
+                    <td>{{ rec.hot_water|yesno:"Гор.,Хол." }}</td>
+                    <td>{{ rec.num_dogovor }}</td>
+
+
+                </tr>
+                {% comment %} {% endifequal %} {% endcomment %}
+            {% endfor %}
+            </tbody>
+        </table>
+        <center>
+        {% if is_paginated %}
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item {% if not prev_url %} disabled{% endif %}">
+                        <a class="page-link" href="{{ prev_url }}" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+
+
+                    {% for n in main.paginator.page_range %}
+
+                        {% if main.number == n %}
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link" href="?page={{ n }}">{{ n }} <span class="sr-only">(current)</span></a>
+                            </li>
+
+                        {% elif n > main.number|add:-3 and  n < main.number|add:3 %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    <li class="page-item {% if not next_url %} disabled{% endif %}">
+                        <a class="page-link " href="{{ next_url }}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        {% endif %}
+
+
+    {% else %}
+        Вам необходимо войти в систему
+    {% endif %}
+{% endblock content %}

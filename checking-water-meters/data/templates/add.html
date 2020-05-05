@@ -1,0 +1,32 @@
+{% extends 'includes/base.html' %}
+{% load my_filters %}
+{% load staticfiles %}
+{% block content %}
+    {% if user.is_authenticated %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+                   {% include "partitions/body/add/browser.html" %}
+        </form>
+
+        {% verbatim %}
+        <script>
+            function getNewDate() {
+                let addYear = Number(document.getElementById("id_interval").value);
+                let dataPoverki = new Date(document.getElementById("dateOne").value).getTime();
+                let newDataPow = new Date(dataPoverki);
+                newDataPow.setFullYear(newDataPow.getFullYear() + addYear);
+                newDataPow.setDate(newDataPow.getDate() - 1);
+                document.getElementById("dateTwo").value = newDataPow.toISOString().split('T')[0];
+            }
+        </script>
+        {% endverbatim %}
+
+
+    {% else %}
+        Вам необходимо войти в систему
+    {% endif %}
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+{% endblock content %}
+

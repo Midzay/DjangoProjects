@@ -1,0 +1,31 @@
+<div class="col-md-12">
+                <div class="row">
+                    <div class = "col">
+
+                    <form method="POST">
+                    {% csrf_token %}
+                    <table>
+                    <tr>
+                    <td>Дата с  </td><td><input class="form-control mb-2" type="date" name ="date_s" value={{date_s}} ></td> 
+                    <td> по  </td><td><input class="form-control mb-2" type="date" name ="date_po"  value={{date_po}} ></td> </tr>
+
+                    <tr>
+                    <td colspan=4> <input class="btn btn-primary  btn-block ml-2 mb-2" type="submit" value="отобрать" ></td>
+                    </tr>
+                    </table>
+                    </form>
+                    </div>
+                    <div class="col-3"></div>
+                    <div >
+                      <a href="{% url 'worker_report' %}">  <button type="button" class="btn btn-primary ">Работники</button></a>
+                       <a href="{% url 'city_report' %}"> <button type="button" class="btn btn-primary">Города</button></a>
+                    </div>
+
+                    
+                </div>
+        </div>
+           </header>
+         <br>
+        <div class="col-md-12">
+        
+         </div>

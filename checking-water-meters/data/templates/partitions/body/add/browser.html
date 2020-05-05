@@ -1,0 +1,158 @@
+{% load my_filters %}
+{% load staticfiles %}
+
+{% if form.errors %}
+    <div class="alert alert-danger"> {{ form.errors }}</div>
+{% endif %}
+
+{% if check %}
+    <div class="alert alert-danger"> Свидетельство с таким номером уже существует</div>
+{% endif %}
+
+<div class="container">
+
+    <div class="form-row">
+
+        <div class="form-group col-lg-3">
+            <label for="id_fio_worker">Имя работника</label>
+            <input type="text" class="form-control" name="fio_worker"
+                   maxlength="150" value="{{ user.last_name }}" required
+                   id="id_fio_worker" readonly="true">
+        </div>
+        <div class="form-group col-lg-3">
+            <div class="d-lg-block d-none"><label for="id_name_type">Наименовение,тип СИ </label></div>
+            {{ form.name_type }}
+        </div>
+        <div class="form-group col-lg-2">
+            <label for="dateOne">Дата поверки{{date}}</label>
+            <input class="form-control" type="date" name="date" id="dateOne" value="{{date}}">
+        </div>
+        <div class="form-group col-lg-1">
+            <label for="addYear">След. через </label>
+            {{ form.interval }}
+        </div>
+
+        <div class="form-group col-lg-3">
+            <label for="id_method">Методика </label>
+            {{ form.method }}
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-lg-3">
+            <label for="dateTwo">Срок окончания поверки </label>
+            <input class="form-control " type="date" name="date_end_powerka" id="dateTwo" value="{{date_end}}">
+        </div>
+
+        <div class="form-group col-lg-3">
+            <label for="id_num_gos_reestr">№ гос. реестра </label>
+            {{ form.num_gos_reestr }}
+        </div>
+
+        <div class="form-group col-lg-1">
+            <label for="id_view_svidet">Серия св. </label>
+            {% if view_svidet %}
+
+                <select name="view_svidet" class="form-control" id="id_view_svidet">
+                    <option value="{{ view_svidet.id }}"
+                            selected="">{{ view_svidet.view_svidet }}</option>
+                </select>
+            {% else %}
+                {{ form.view_svidet }}
+            {% endif %}
+        </div>
+
+        <div class="form-group col-lg-2">
+            <label for="id_num_svidet_powerka">№ св-ва о поверке </label>
+            {{ form.num_svidet_powerka }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_etalon">Используемый эталон </label>
+            {% if etalon %}
+                <select name="etalon" class="form-control" required="" id="id_etalon">
+                    <option value="{{ etalon.id }}" selected="">{{ etalon.etalon }}</option>
+
+                </select>
+            {% else %}
+                {{ form.etalon }}
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="form-row">
+
+        <div class="form-group col-lg-3">
+            <label for="id_city">Город</label>
+            {{ form.city }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_num_fabric">Заводской номер </label>
+            {{ form.num_fabric }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_result_powerka">Результат поверки</label>
+            {{ form.result_powerka }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_plomba">Наличие пломбы</label>
+            {{ form.plomba }}
+        </div>
+    </div>
+
+
+    <div class="form-row">
+
+        <div class="form-group col-lg-3">
+            <label for="id_city">Адрес</label>
+            {{ form.adress }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_num_fabric">Место расположения счетчика </label>
+            {{ form.place }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_result_powerka">Вода</label>
+            {{ form.hot_water }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_plomba">Номер телефона</label>
+            {{ form.num_telephone }}
+        </div>
+    </div>
+
+    <div class="form-row">
+
+        <div class="form-group col-lg-3">
+            <label for="id_city">ФИО клиента</label>
+            {{ form.fio_client }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_num_fabric">Показания счетчика </label>
+            {{ form.pokazaniya }}
+        </div>
+        <div class="form-group col-lg-3">
+            <label for="id_result_powerka">Qh </label>
+            {{ form.qh }}
+        </div>
+
+        {% if amp_boolean %}
+            <div class="form-group col-lg-3">
+                <label for="id_result_powerka">№ АМП </label>
+                {{ form.amp_filed }}
+            </div>
+            </div>
+            <div class="form-row justify-content-end">
+                <div class="form-group col-lg-3 align-self-end">
+                    <input class="btn btn-primary btn-lg btn-block " type="submit"
+                           value="Добавить"/>
+                </div>
+            </div>
+        {% else %}
+            <div class="form-group col-lg-3 align-self-end">
+                <input class="btn btn-primary btn-lg btn-block " type="submit"
+                       value="Добавить"/>
+            </div>
+        {% endif %}
+</div>
+</div>

@@ -1,0 +1,24 @@
+{% extends 'includes/base.html' %}
+
+{% block login %}
+    <div class="card mt-5">
+
+        <div class="card-title text-center"><h3>Авторизация</h3></div>
+
+        <div class="row">
+            <div class="col text-center">
+                <form method="post">
+                    {% csrf_token %}
+                    <label for="id_username">Имя пользователя: &nbsp&nbsp</label><br>{{ form.username }} <br><br>
+                    <label for="id_password">Пароль:&nbsp&nbsp </label> <br>{{ form.password }}<br><br>
+                    <input type="hidden" name="next" value={% url 'index_data' %}>
+                    <input class="btn btn-lg btn-secondary" type="submit" value='Войти'>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock login %}
+
+

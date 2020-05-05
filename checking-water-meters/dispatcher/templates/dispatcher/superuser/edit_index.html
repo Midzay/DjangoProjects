@@ -1,0 +1,100 @@
+{% extends 'dispatcher/includes/base.html' %}
+{% block content %}
+    {% if user.is_authenticated %}
+        {% load staticfiles %}
+
+        <form method='post'>
+            {% if form.errors %}
+                <div class="alert alert-danger"> {{ form.errors }}</div>
+            {% endif %}
+            {% csrf_token %}
+
+            {% comment %} <input type="hidden" name="fio_worker" value={{user.last_name}}>  {% endcomment %}
+            <div class="row">
+
+                <div class="col-md-12">
+                    <table class=" ml-3 mt-4 " cellpadding="10">
+                        <tr>
+                            <td>Дата установки {{ form.date }}</td>
+                            <td>Ф.И.О./Наименовани Юр.лица {{ form.fio_client }} </td>
+                            <td>Контактный телефон {{ form.phone }} </td>
+                            <td>Адрес{{ form.adress }} </td>
+                            <td>Тип{{ form.name_type }} </td>
+                            <td>Заводской номер{{ form.num_fabric }} </td>
+                        </tr>
+                        <tr>
+                            <td>Текущие показания {{ form.pokazaniya }}</td>
+                            <td>Последнее обновление {{ form.last_update }} </td>
+                            <td>Вода Х/Г {{ form.hot_water }} </td>
+                            <td>Договор №{{ form.num_dogovor }} </td>
+                            <td colspan="2" valign="bottom">
+                                <button class="btn btn-primary btn-lg btn-block "
+                                        value="Добавить">Исправить
+                                </button>
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </div>
+
+
+            </div>
+            <br><br>
+
+            <a href="{% url 'del_dispatcher' num_id=con.id %}" class="ml-4">
+                <button type="button" onclick="return proverka();" class="btn btn-danger">УДАЛИТЬ
+                </button>
+
+            </a>
+        </form>
+
+        </div>
+
+        </div>
+
+
+
+        <center>
+        {% if is_paginated %}
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item {% if not prev_url %} disabled{% endif %}">
+                        <a class="page-link" href="{{ prev_url }}" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+
+
+                    {% for n in main.paginator.page_range %}
+
+                        {% if main.number == n %}
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link" href="?page={{ n }}">{{ n }} <span class="sr-only">(current)</span></a>
+                            </li>
+
+                        {% elif n > main.number|add:-3 and  n < main.number|add:3 %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    <li class="page-item {% if not next_url %} disabled{% endif %}">
+                        <a class="page-link " href="{{ next_url }}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        {% endif %}
+
+
+    {% else %}
+        Вам необходимо войти в систему
+    {% endif %}
+    <script>
+    function proverka() {
+        if (confirm("Подтвердить удаление")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>
+{% endblock content %}

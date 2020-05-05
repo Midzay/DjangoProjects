@@ -1,0 +1,83 @@
+{% extends 'includes/base.html' %}
+{% load my_filters %}
+{% load staticfiles %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'index_data' %}">
+            {% csrf_token %}
+            <div class="container">
+                <div class="form-row ">
+
+                    <div class="col-6 ">
+                        <input type="date" class="form-control" name="date" placeholder="дата" style="margin:3px;">
+                    </div>
+                    <div class="col-6 ">
+                        <input type="text" class="form-control" name="num_svidet_powerka" placeholder="Номер свид"
+                               size="15"
+                               style="margin:3px">
+                    </div>
+                    <div class="col ">
+                        <input type="text" class="form-control " name="num_fabric" placeholder="Зав №" size="15"
+                               style="margin:3px">
+                    </div>
+                </div>
+                <div class="form-row mt-2">
+                    <div class="col"><input class="btn btn-secondary btn-block " type="submit" name="find_mobile"
+                                            value="Найти">
+                    </div>
+                    <div class="col"><a class="btn btn-secondary  btn-block" href="{% url 'create_data' %}">
+                        Добавить
+                    </a></div>
+                </div>
+            </div>
+
+        </form>
+        <div class="container sm-3">
+
+
+            <div class="table-responsive">
+                <table style="align:align-center" class="table ">
+                    <thead class="thead-light">
+                    <tr align="center" style="font-size:small">
+                        <th scope="col">Наименование, тип СИ</th>
+                        <th scope="col">Заводской номер</th>
+                        <th scope="col">Дата поверки/действует до</th>
+                        <th scope="col">Гор/Хол</th>
+                        <th scope="col">Показания счетчика</th>
+
+                    </tr>
+                    </thead>
+                    <tbody align="center" class="tbody-striped">
+
+
+                    {% for rec in con %}
+
+                        <tr>
+                            <td>{{ rec.name_type }}</td>
+                            <td><a href="{% url 'edit_data' num_id=rec.id %}">{{ rec.num_fabric }}</a></td>
+                            <td>{{ rec.date|date:"d.m.Y" }} /{{ rec.date_end_powerka|date:"d.m.Y" }}</td>
+                            <td>{{ rec.hot_water|yesno:"ГОР,ХОЛ" }}</td>
+                            <td>{{ rec.pokazaniya }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <form method="POST" action="{% url 'index_data' %}">
+                        {% csrf_token %}
+                        <input class="btn btn-primary btn-block " type="submit" name="back"
+                               value="Назад">
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+
+    {% else %}
+        Вам необходимо войти в систему
+    {% endif %}
+{% endblock content %}

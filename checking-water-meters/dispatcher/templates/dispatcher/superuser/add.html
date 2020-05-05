@@ -1,0 +1,92 @@
+{% extends 'includes/base.html' %}
+{% block content %}
+    <div id="app">
+        <form method='post'>
+            {% if form.errors %}
+                <div class="alert alert-danger"> {{ form.errors }}</div>
+            {% endif %}
+            {% csrf_token %}
+
+            {% comment %} <input type="hidden" name="fio_worker" value={{user.last_name}}>  {% endcomment %}
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <table class=" ml-3 mt-4 " cellpadding="10">
+                        <tr>
+                            <td width=25%>Имя работника <input type="text" class="form-control" name="fio_worker"
+                                                               maxlength="150" value="{{ user.last_name }}" required
+                                                               id="id_fio_worker"></td>
+                            </td>
+                            <td>Наименовение,тип СИ {{ form.name_type }} </td>
+                            <td>{% verbatim %}Срок окончания поверки<input class="form-control " type="date"
+                                                                           name="date_end_powerka"
+                                                                           v-bind:value="date_pow"> {% endverbatim %}
+                            </td>
+                            <td width=25%>Методика {{ form.method }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td>Дата</td>
+                                        <td>Следущая через:</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input class="form-control" type="date" name="date" v-on:input="changeDate">
+                                        </td>
+                                        <td>
+                                            {% verbatim %}
+
+                                            <select class="form-control" v-model="count" v-on:click="changeYear">
+                                                <option v-for="option in options" v-bind:value="option.value">
+                                                    {{ option.text }}
+                                                </option>
+                                            </select>
+                                            {% endverbatim %}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>№ гос. реестра {{ form.num_gos_reestr }} </td>
+
+                            <td width=25%>
+                                <table>
+                                    <tr>
+                                        <td width="40%">Вид свидет.</td>
+                                        <td>№ св-ва о поверке</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ form.view_svidet }}</td>
+                                        <td>{{ form.num_svidet_powerka }}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="25%">Используемый эталон {{ form.etalon }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Город {{ form.city }} </td>
+                            <td>Заводской номер {{ form.num_fabric }} </td>
+                            <td>Результат поверки {{ form.result_powerka }} </td>
+                            <td>Наличие пломбы {{ form.plomba }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Адрес {{ form.adress }} </td>
+                            <td>Место расположения счетчика {{ form.place }} </td>
+                            <td>Вода {{ form.hot_water }} </td>
+                            <td rowspan=2 valign="bottom"><input class="btn btn-primary btn-lg btn-block " type="submit"
+                                                                 value="Добавить"></td>
+                        </tr>
+                        <tr>
+                            <td>ФИО клиента {{ form.fio_client }} </td>
+                            <td>Показания счетчика {{ form.pokazaniya }} </td>
+                            <td>Qh {{ form.qh }} </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+        </form>
+{% endblock content %}

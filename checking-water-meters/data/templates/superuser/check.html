@@ -1,0 +1,163 @@
+{% extends 'includes/base.html' %}
+{% block content %}
+{% if user.is_authenticated and user.is_staff %}
+{% load staticfiles %}
+
+{% if error %}
+    <div class="alert alert-danger"> Данных нет, или неверный запрос</div>
+{% endif %}
+
+
+
+<br>
+
+<form method="POST" action="../check_svidet/">
+    {% csrf_token %}
+    <div class="row col-12 mt-3">
+        
+        <div class="mt-2 ml-3">Проверка свидетельств</div>
+        <div class="col-8">
+            <table>
+
+
+                <tr>
+                    <td>
+                        <div class="col min-width-250"><select class="form-control" name="view_svidet">
+                                <option value=0>Серия свидетельства </option>
+                                {% for v in svidet_object %}
+                                <option value={{ v.view_svidet }} {% if v.view_svidet == view_svidet %} selected
+                                    {% endif %}>{{ v.view_svidet }}</option>
+                                {% endfor %}
+                            </select></div>
+                    </td>
+                    <td>
+                        <div class="col">
+
+                            <input class="form-control " type="text" name="num_start" placeholder="Диапазон с "
+                                value={{ num_start }}>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col">
+
+                            <input class="form-control " type="text" name="num_end" placeholder="Диапазон по"
+                                value={{ num_end }}>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="col">
+
+                            <input class="btn btn-primary" type="submit" name="btn_check_number_svidet"
+                                value="Сформировать">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+</form>
+<hr class="mt-5">
+
+<form method="POST" action="../print_many_protokol/" >
+    {% csrf_token %}
+    <div class="row col-12 mt-5">
+
+        
+        <div class="col-6">
+            <div class="ml-3 mb-3">Печать протоколов</div>
+            <table>
+
+
+                <tr>
+                    <td>
+                        <div class="col min-width-250"><select class="form-control" name="view_svidet">
+                                <option value=0>Свидетельство </option>
+                                {% for v in svidet_object %}
+                                <option value={{ v.view_svidet }} {% if v.view_svidet == view_svidet %} selected
+                                    {% endif %}>{{ v.view_svidet }}</option>
+                                {% endfor %}
+                            </select></div>
+                    </td>
+
+                    <td>
+                        <div class="col">
+
+                            <select name="fio_worker" class="form-control" maxlength="150" id="id_last_name">
+                                <option value=999>Работник</option>
+
+                                {% for all_fw in fio_worker_list %}
+                                <option value="{{ all_fw.last_name }}" {% if all_fw.last_name == fw %} selected
+                                    {% endif %}>{{ all_fw.last_name }}</option>
+
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr >
+                    <td>
+                        <div class="col mt-3">
+
+                            <input class="form-control " type="text" name="num_start" placeholder="Диапазон с "
+                                value={{ num_start }}>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col mt-3">
+
+                            <input class="form-control " type="text" name="num_end"  placeholder="Диапазон по"
+                                value={{ nunum_end_fabric }}>
+                        </div>
+                    </td>
+                    
+                    <td>
+                        <div class="col mt-3">
+
+                            <input class="btn btn-primary" type="submit" name="btn_many_protokol" value="Сформировать">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="col-6"> Последние 10 запросов
+
+            <table class="table" style="text-align: center;">
+                <thead>
+                    <tr>
+                        
+                        <th scope="col">ФИО работника</th>
+                        <th scope="col">Свидетельство</th>
+                        <th scope="col">Диапазон</th>
+                        <th scope="col">Дата</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rec in previously_formed %}
+                    <tr>
+
+                        <td>{{ rec.fio_worker  }}</td>
+                        <td>{{ rec.view_svidet  }}</td>
+                        <td>{{ rec.range_number  }}</td>
+                        <td>{{ rec.data_create  }}</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <hr>
+</form>
+
+
+
+{% else %}
+Вам необходимо войти в систему
+{% endif %}
+{% endblock content %}

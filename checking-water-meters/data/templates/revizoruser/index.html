@@ -1,0 +1,180 @@
+{% extends 'includes/base.html' %}
+{% block content %}
+    {% if user.is_authenticated %}
+        {% load staticfiles %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row col-md-12 mt-5">
+                <div class="col-md-2"></div>
+                <div class="row col-md-10 mb-3">
+
+                    <div class="col-md-1">
+                        <img src="{% static 'data/bigUser.png' %}" alt="">
+                    </div>
+
+                    <div class="col-md-3">
+                        Всего: <b>{{ all }}</b><br> Прошло поверку: <b>{{ pow_ok }}</b><br> Не прошло поверку:
+                        <b>{{ pow_no }}</b>
+                    </div>
+
+
+                    <div class="col-md-5">
+
+                       <div class="form-row  mb-2">
+                            <div class="col">
+                                Дата с
+                                <input class="form-control " type="date" name="date_s" value={{ date_s }}>
+                            </div>
+                            <div class="col ">
+                                По
+                                <input class="form-control " type="date" name="date_po" value={{ date_po }}>
+                            </div>
+                        </div>
+                        <div class="form-row mb-2">
+                            <div class="col">
+
+                                <input class="form-control " type="text" name="search_adr" placeholder="Адрес"
+                                       value={{ search_adr }}>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+
+                                <input class="form-control " type="text" name="num_fabric" placeholder="Заводской номер"
+                                       value={{ num_fabric }}>
+                            </div>
+                            <div class="col">
+
+                                <input class="form-control " type="text" name="num_svidet_powerka" placeholder="Номер свидетельства"
+                                       value={{ num_svidet_powerka }}>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control mb-2" name="view_svidet">
+                            <option value=0>Серия свидетельства</option>
+                            {% for v in svidet_object %}
+                                <option value={{ v.view_svidet }} {% if v.view_svidet == view_svidet %} selected {% endif %}>{{ v.view_svidet }}</option>
+
+                            {% endfor %}
+                        </select>
+                        <select class="form-control mb-2" name="city">
+                            <option value=0>Город</option>
+                            {% for c in city_object %}
+                                <option value="{{ c.city }}" {% if c.city == city %}
+                                        selected {% endif %} >{{ c.city }}</option>
+
+                            {% endfor %}
+                        </select>
+                        <select class="form-control mb-2" name="water">
+                            <option value=9>Вода</option>
+                            <option value=1 {% if water == '1' %}selected {% endif %}>Горячая</option>
+                            <option value=0 {% if water == '0' %}selected {% endif %}>Холодная</option>
+                        </select>
+
+                        <button class="btn btn-primary " type="submit" style="width:100%;">Отобрать</button>
+
+                    </div>
+
+        </form>
+        </div>
+
+        </div>
+
+
+
+
+        <table style="align:align-center" class="table m-md-3">
+            <thead class="thead-light">
+            <tr align="center" style="font-size:small">
+
+                <th scope="col">#</th>
+                <th scope="col">Фио работника</th>
+                <th scope="col">Дата</th>
+                <th scope="col">Город</th>
+                <th scope="col">Адрес</th>
+                <th scope="col">ФИО клиента</th>
+                <th scope="col">Наименование, тип СИ</th>
+                <th scope="col">№ гос. реестра</th>
+                <th scope="col">Заводской номер</th>
+                <th scope="col">Место расположения счетчика</th>
+                <th scope="col">Показания счетчика</th>
+                <th scope="col">Срок окончания поверки</th>
+                <th scope="col">Серия свидетельства</th>
+                <th scope="col">№ св-ва о поверке</th>
+                <th scope="col">Результат поверки(годен)</th>
+                <th scope="col">Qh</th>
+                <th scope="col">Вода</th>
+                <th scope="col">Методика</th>
+                <th scope="col">Используемый эталон</th>
+                <th scope="col">Наличие пломбы</th>
+            </tr>
+            </thead>
+            <tbody align="center" class="tbody-striped">
+            {% for rec in main.object_list %}
+                {% comment %} {% ifequal rec.fio_worker user.last_name %}   {% endcomment %}
+                <tr>
+
+                    <td>{{ forloop.counter0|add:main.start_index }}</td>
+                    <td>{{ rec.fio_worker }}</td>
+                    <td><a href="{% url 'edit_data' num_id=rec.id %}" class="">{{ rec.date|date:"d.m.Y" }}</a></td>
+                    <td>{{ rec.city }}</td>
+                    <td>{{ rec.adress }}</td>
+                    <td>{{ rec.fio_client }}</td>
+                    <td>{{ rec.name_type }}</td>
+                    <td>{{ rec.num_gos_reestr }}</td>
+                    <td>{{ rec.num_fabric }}</td>
+                    <td>{{ rec.place }}</td>
+                    <td>{{ rec.pokazaniya }}</td>
+                    <td>{{ rec.date_end_powerka |date:"d.m.Y" }}</td>
+                    <td>{{ rec.view_svidet|default:'НЕТ' }}</td>
+                    <td>{{ rec.num_svidet_powerka }}</td>
+                    <td>{{ rec.result_powerka|yesno:"ДА,НЕТ" }}</td>
+                    <td>{{ rec.qh }}</td>
+                    <td>{{ rec.hot_water|yesno:"Гор.,Хол." }}</td>
+                    <td>{{ rec.method }}</td>
+                    <td>{{ rec.etalon }}</td>
+                    <td>{{ rec.plomba |yesno:"ДА,НЕТ" }}</td>
+
+                </tr>
+                {% comment %} {% endifequal %} {% endcomment %}
+            {% endfor %}
+            </tbody>
+        </table>
+        <center>
+        {% if is_paginated %}
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item {% if not prev_url %} disabled{% endif %}">
+                        <a class="page-link" href="{{ prev_url }}" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+
+
+                    {% for n in main.paginator.page_range %}
+
+                        {% if main.number == n %}
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link" href="?page={{ n }}">{{ n }} <span class="sr-only">(current)</span></a>
+                            </li>
+
+                        {% elif n > main.number|add:-3 and  n < main.number|add:3 %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    <li class="page-item {% if not next_url %} disabled{% endif %}">
+                        <a class="page-link " href="{{ next_url }}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        {% endif %}
+
+
+    {% else %}
+        Вам необходимо войти в систему
+    {% endif %}
+
+{% endblock content %}

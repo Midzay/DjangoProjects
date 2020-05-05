@@ -1,0 +1,26 @@
+{% load static %}
+<div class="container-fluid">
+    <div class="container-fluid header-custom">
+        <div class="row mt-1 justify-content-center align-items-center ">
+            <div class="col-lg-2 col">
+                <a href="{% url 'index_data' %} "><img class="img-thumbnail m-2" src= {% static 'data/logo.jpg' %}></a>
+            </div>
+
+            <div class="col-2">
+                <a class="btn btn-secondary btn-block" href="{% url 'create_data' %}">Добавить </a>
+            </div>
+            {% if user.is_staff %}
+                <div class="col-2" style="margin-left: 11px">
+                    <a class="btn btn-secondary btn-block" href="{% url 'reports' %}">Отчеты </a>
+                </div>
+            {% endif %}
+            <div class="col text-right">
+                <img src="{% static 'data/user.png' %}"><span class="ml-2"
+                                                              style="font-size: 1.2em;color: white">{{ user.last_name }}</span>
+            </div>
+            <div class="col-1">
+                <a class="btn btn-secondary" href="{% url 'logout' %}">Выйти </a>
+            </div>
+        </div>
+    </div>
+</div>

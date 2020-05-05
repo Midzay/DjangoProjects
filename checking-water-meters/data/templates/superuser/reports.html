@@ -1,0 +1,251 @@
+{% extends 'includes/base.html' %}
+{% block content %}
+    {% if user.is_authenticated and user.is_staff %}
+        {% load staticfiles %}
+
+        <header>
+
+
+
+        <div class="row col-12">
+            <div class="col"></div>
+            <div class="col-10 mb-3">
+                Всего: <b>{{ all }}</b>&nbsp &nbsp &nbsp Прошло поверку: <b>{{ pow_ok }}</b>&nbsp &nbsp &nbsp Не прошло
+                поверку: <b>{{ pow_no }}</b>
+            </div>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row col-12">
+                <div class="col-2"></div>
+
+                <div class="col-5">
+                    <table>
+                        <tr>
+                            <td rowspan=8 valign=top><img src="{% static 'data/bigFilter.png' %}" alt="">
+                            <td>Дата с&nbsp</td>
+                            <td><input class="form-control mb-2" type="date" name="date_s" value={{ date_s }}></td>
+                            <td> &nbsp по &nbsp</td>
+                            <td><input class="form-control mb-2" type="date" name="date_po" value={{ date_po }}></td>
+                        </tr>
+                        <tr>
+                            <td> Адрес &nbsp</td>
+                            <td colspan=3><input class="form-control mb-2" type="text" name="search_adr"
+                                                 value={{ search_adr }}></td>
+                        </tr>
+                        <tr>
+                            <td colspan=4><select class="form-control mb-2" name="view_svidet">
+                                <option value=0>Серия свидетельства</option>
+                                {% for v in svidet_object %}
+                                    <option value={{ v.view_svidet }} {% if v.view_svidet == view_svidet %} selected {% endif %}>{{ v.view_svidet }}</option>
+                                {% endfor %}
+                            </select></td>
+                        </tr>
+                        <tr>
+                            <td colspan=4>
+                                <select class="form-control mb-2" name="city">
+                                    <option value=0>Город</option>
+                                    {% for c in city_object %}
+
+                                        <option value="{{ c.city }}" {% if c.city == city %}
+                                                selected {% endif %}>{{ c.city }}</option>
+
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan=4>
+                                <div class="form-row mb-2">
+                                    <div class="col">
+                                        <select class="form-control " name="water">
+                                            <option value=9>Вода</option>
+                                            <option value=1 {% if water == '1' %}selected {% endif %}>Горячая</option>
+                                            <option value=0 {% if water == '0' %}selected {% endif %}>Холодная</option>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+
+
+                            <select name="fio_worker" class="form-control" maxlength="150" id="id_last_name">
+                                <option value=999>Работник</option>
+
+                                 {% for all_fw in fio_worker_list %}
+                                        <option value="{{ all_fw.last_name }}" {% if all_fw.last_name == fw %}
+                                                selected {% endif %}>{{ all_fw.last_name }}</option>
+
+                                    {% endfor %}
+                            </select>
+                </div>
+            </div>
+            </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div class="form-row mb-2">
+                        <div class="col">
+
+                            <input class="form-control " type="text" name="num_fabric"
+                                   placeholder="Заводской номер"
+                                   value={{ num_fabric }}>
+                        </div>
+                        <div class="col">
+
+                            <input class="form-control " type="text" name="num_svidet_powerka"
+                                   placeholder="Номер свидетельства"
+                                   value={{ num_svidet_powerka }}>
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan=4><input class="btn btn-primary btn-block   mb-2" type="submit"
+                                     value="отобрать"></td>
+            </tr>
+            <tr>
+                <td colspan=2><a href="{% url 'worker_report' %}" class="btn btn-primary btn-block">
+                    Работники</a></td>
+
+                <td colspan=2><a href="{% url 'city_report' %}" class="btn btn-primary btn-block">
+                    Города</a>
+            </tr>
+            </table>
+            </div>
+
+            <div class="col-5">
+
+                <table>
+
+                    <tr align="right">
+                        {% for field in form %}
+                            {% comment %} {% if forloop.counter == 6 or forloop.counter == 12 or forloop.counter == 18   %} {% endcomment %}
+                            {% if forloop.counter|divisibleby:"2" %}
+                                <td>&nbsp&nbsp{{ field.label }} </td>
+                                <td><input type="checkbox" name="{{ field.label }}" checked></tr>
+                                <tr align="right">
+                            {% else %}
+                                <td>&nbsp&nbsp{{ field.label }} </td>
+                                <td><input type="checkbox" name="{{ field.label }}" checked>
+                            {% endif %}
+
+                        {% endfor %}
+                        </tr>
+                    <tr>
+                        <td colspan=4 align=right><input class="btn btn-primary  mt-2" type="submit" name="btn_rep"
+                                                         value="Сформировать xlsx"></td>
+                    </tr>
+                    <tr>
+                        <td colspan=2 align=right><input class="btn btn-primary  mt-2" type="submit" name="btn_fond"
+                                                         value="Отчет в ФОНД"></td>
+                        <td colspan=2 ><a href="{% url 'check' %}" class="btn  mt-2 btn-primary btn-block">
+                            Проверки</a></td>
+                    </tr>
+                </table>
+            </div>
+
+            </div>
+
+
+            </table>
+            <div class="row">
+                <div class="col-lg-10"></div>
+
+            </div>
+
+        </form>
+
+
+        <table style="align:align-center" class="table">
+            <thead class="thead-light">
+            <tr align="center" style="font-size:small">
+
+                <th scope="col">#</th>
+                <th scope="col">ФИО работника</th>
+                <th scope="col">Дата</th>
+                <th scope="col">Город</th>
+                <th scope="col">Адрес</th>
+                <th scope="col">ФИО клиента</th>
+                <th scope="col">Наименование, тип СИ</th>
+                <th scope="col">№ гос. реестра</th>
+                <th scope="col">Заводской номер</th>
+                <th scope="col">Место расположения счетчика</th>
+                <th scope="col">Показания счетчика</th>
+                <th scope="col">Срок окончания поверки</th>
+                <th scope="col">Серия свидетельства</th>
+                <th scope="col">№ св-ва о поверке</th>
+                <th scope="col">Результат поверки(годен)</th>
+                <th scope="col">Qh</th>
+                <th scope="col">Вода</th>
+                <th scope="col">Методика</th>
+                <th scope="col">Используемый эталон</th>
+                <th scope="col">Наличие пломбы</th>
+            </tr>
+            </thead>
+            <tbody align="center" class="tbody-striped">
+            {% for rec in main.object_list %}
+                {% comment %} {% ifequal rec.fio_worker user.last_name %}   {% endcomment %}
+                <tr>
+
+                    <td>{{ forloop.counter0|add:main.start_index  }}</td>
+                    <td class="mycls">{{ rec.fio_worker }}</td>
+                    <td class="mycls"><a href="{% url 'edit_data' num_id=rec.id %}"
+                                         class="">{{ rec.date|date:"j.m.Y" }}</a></td>
+                    <td class="mycls">{{ rec.city }}</td>
+                    <td class="mycls">{{ rec.adress }}</td>
+                    <td class="mycls">{{ rec.fio_client }}</td>
+                    <td> {{ rec.name_type }}</td>
+                    <td>{{ rec.num_gos_reestr }}</td>
+                    <td>{{ rec.num_fabric }}</td>
+                    <td>{{ rec.place }}</td>
+                    <td>{{ rec.pokazaniya }}</td>
+                    <td>{{ rec.date_end_powerka|date:"j.m.Y" }}</td>
+                    <td>{{ rec.view_svidet|default:'НЕТ' }}</td>
+                    <td>{{ rec.num_svidet_powerka }}</td>
+                    <td>{{ rec.result_powerka|yesno:"ДА,НЕТ" }}</td>
+                    <td>{{ rec.qh }}</td>
+                    <td>{{ rec.hot_water|yesno:"Гор.,Хол." }}</td>
+                    <td>{{ rec.method }}</td>
+                    <td>{{ rec.etalon }}</td>
+                    <td>{{ rec.plomba |yesno:"ДА,НЕТ" }}</td>
+
+                </tr>
+                {% comment %} {% endifequal %} {% endcomment %}
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <center>
+        {% if is_paginated %}
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item {% if not prev_url %} disabled{% endif %}">
+                        <a class="page-link" href="{{ prev_url }}" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                    {% for n in main.paginator.page_range %}
+
+                        {% if main.number == n %}
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link" href="?page={{ n }}">{{ n }} <span class="sr-only">(current)</span></a>
+                            </li>
+
+                        {% elif n > main.number|add:-3 and  n < main.number|add:3 %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    <li class="page-item {% if not next_url %} disabled{% endif %}">
+                        <a class="page-link " href="{{ next_url }}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        {% endif %}
+
+
+    {% else %}
+        Вам необходимо войти в систему
+    {% endif %}
+{% endblock content %}

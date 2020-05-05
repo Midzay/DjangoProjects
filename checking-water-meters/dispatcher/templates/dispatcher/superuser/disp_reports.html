@@ -1,0 +1,213 @@
+{% extends 'dispatcher/includes/base.html' %}
+{% block content %}
+    {% if user.is_authenticated and user.is_staff %}
+        {% load staticfiles %}
+
+        <header>
+
+        <form method="POST">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert-danger"> {{ form.errors }}</div>
+            {% endif %}
+            <div class="row">
+                <div class="col-md-12">
+                    <table class=" ml-3 mt-4 " cellpadding="10">
+                        <tr>
+                            <td>Дата установки <input class="form-control mb-2" type="date" name="date"
+                                                      value={{ date }}></td>
+                            <td>Ф.И.О./Наименоване <input class="form-control mb-2" type="text"
+                                                          name="fio_client" value={{ fio_client }}></td>
+                            <td>Контактный телефон <input class="form-control mb-2" type="text" name="phone"
+                                                          value={{ phone }}></td>
+                            <td>Адрес<input class="form-control mb-2" type="text" name="adress" value={{ adress }}></td>
+                            <td>Тип<input class="form-control mb-2" type="text" name="name_type" value={{ name_type }}>
+                            </td>
+                            <td>Заводской номер<input class="form-control mb-2" type="text" name="num_fabric"
+                                                      value={{ num_fabric }}></td>
+                        </tr>
+                        <tr>
+                            <td>Текущие показания <input class="form-control mb-2" type="text" name="pokazaniya"
+                                                         value={{ pokazaniya }}></td>
+                            <td>Последнее обновление <input class="form-control mb-2" type="date" name="last_update"
+                                                            value={{ last_update }}></td>
+                            <td>Вода Х/Г <select class="form-control mb-2" name="hot_water">
+                                <option value=9>-------</option>
+                                <option value=1 {% if water == '1' %}selected {% endif %}>Горячая</option>
+                                <option value=0 {% if water == '0' %}selected {% endif %}>Холодная</option>
+                            </select></td>
+
+                            <td>Договор №<input class="form-control mb-2" type="text" name="num_dogovor"
+                                                value={{ num_dogovor }}></td>
+                            <td>Пок.отсутств(мес)<input class="form-control mb-2" type="text" name="empty_pokaz"
+                                                        value={{ empty_pokaz }}></td>
+                            <td colspan="1" valign="bottom">
+                                <button class="btn btn-primary btn-lg btn-block "
+                                        value="Отобрать">Отобрать
+                                </button>
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="col-12">
+                    <br><br>
+
+
+                    <table width="95%">
+
+                        <tbody>
+                        <tr align="right">
+
+
+                            <td>&nbsp;&nbsp;Дата установки</td>
+                            <td><input type="checkbox" name="Дата установки" checked="">
+
+
+                            </td>
+                            <td>&nbsp;&nbsp;ФИО клиента</td>
+                            <td><input type="checkbox" name="ФИО клиента" checked="">
+
+
+                            </td>
+                            <td>&nbsp;&nbsp;Контактный телефон</td>
+                            <td><input type="checkbox" name="Контактный телефон" checked="">
+
+
+                            </td>
+                            <td>&nbsp;&nbsp;Адрес места эксплуатации (места установки)</td>
+                            <td><input type="checkbox" name="Адрес места эксплуатации (места установки)" checked="">
+
+
+                            </td>
+                            <td>&nbsp;&nbsp;Тип (наименование) модель, счетчика</td>
+                            <td><input type="checkbox" name="Тип (наименование) модель, счетчика" checked=""></td>
+                        </tr>
+                        <tr align="right">
+
+
+                            <td>&nbsp;&nbsp;Заводской номер</td>
+                            <td><input type="checkbox" name="Заводской номер" checked="">
+
+
+                            </td>
+                            <td>&nbsp;&nbsp;Текущие показания</td>
+                            <td><input type="checkbox" name="Текущие показания" checked="">
+
+
+                            </td>
+                            <td>&nbsp;&nbsp;Последнее обновление показаний</td>
+                            <td><input type="checkbox" name="Последнее обновление показаний" checked="">
+
+
+                            </td>
+                            <td>&nbsp;&nbsp;Тип энергоресурса : вода Х/Г</td>
+                            <td><input type="checkbox" name="Тип энергоресурса : вода Х/Г" checked="">
+
+
+                            </td>
+                            <td>&nbsp;&nbsp;Договор №</td>
+                            <td><input type="checkbox" name="Договор №" checked=""></td>
+                        </tr>
+                        <tr align="right">
+
+
+                        </tr>
+                        <tr>
+                            <td colspan="10" align="right"><input class="btn btn-primary  mt-2" type="submit"
+                                                                  name="btn_rep" value="Сформировать xlsx"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+            </div>
+
+
+            </table>
+            <div class="row">
+                <div class="col-lg-10"></div>
+
+            </div>
+
+        </form>
+
+        <div class="row">
+            <table style="align:align-center" class="table m-md-3">
+                <thead class="thead-light">
+                <tr align="center" style="font-size:small">
+
+                    <th scope="col">#</th>
+                    <th scope="col">Дата установки</th>
+                    <th scope="col">Наименование</th>
+                    <th scope="col">Телефон</th>
+                    <th scope="col">Адрес</th>
+                    <th scope="col">Наименование, тип СИ</th>
+                    <th scope="col">Заводской номер</th>
+                    <th scope="col">Текущие показания</th>
+                    <th scope="col">Последнее обновление показаний</th>
+                    <th scope="col">Вода Х/Г</th>
+                    <th scope="col">Договор №</th>
+                </tr>
+                </thead>
+                <tbody align="center" class="tbody-striped">
+                {% for rec in main.object_list %}
+                    {% comment %} {% ifequal rec.fio_worker user.last_name %}   {% endcomment %}
+                    <tr>
+
+                        <td>{{ forloop.counter }}</td>
+
+                        <td><a href="{% url 'edit_dispatcher' num_id=rec.id %}" class="">{{ rec.date|date:"j.m.Y" }}</a>
+                        </td>
+                        <td>{{ rec.fio_client }}</td>
+                        <td>{{ rec.phone }}</td>
+                        <td>{{ rec.adress }}</td>
+                        <td>{{ rec.name_type }}</td>
+                        <td>{{ rec.num_fabric }}</td>
+                        <td>{{ rec.pokazaniya }}</td>
+                        <td>{{ rec.last_update|date:"j.m.Y" }}</td>
+                        <td>{{ rec.hot_water|yesno:"Гор.,Хол." }}</td>
+                        <td>{{ rec.num_dogovor }}</td>
+
+
+                    </tr>
+                    {% comment %} {% endifequal %} {% endcomment %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <center>
+        {% if is_paginated %}
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item {% if not prev_url %} disabled{% endif %}">
+                        <a class="page-link" href="{{ prev_url }}" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                    {% for n in main.paginator.page_range %}
+
+                        {% if main.number == n %}
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link" href="?page={{ n }}">{{ n }} <span class="sr-only">(current)</span></a>
+                            </li>
+
+                        {% elif n > main.number|add:-3 and  n < main.number|add:3 %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    <li class="page-item {% if not next_url %} disabled{% endif %}">
+                        <a class="page-link " href="{{ next_url }}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        {% endif %}
+
+
+    {% else %}
+        Вам необходимо войти в систему
+    {% endif %}
+{% endblock content %}

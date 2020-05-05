@@ -1,0 +1,74 @@
+{% extends 'includes/base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+
+<header><br>
+        {% include 'includes/button_rep.html' %}
+         
+
+            <table style="align:align-center" class="table m-md-3" >
+            <thead class="thead-light">
+            <tr align="center" style= "font-size:small">
+                
+                <th scope="col">#</th>
+                <th scope="col">{{name_table}}</th>
+                <th scope="col">Прошли проверку </th>
+                <th scope="col">Не прошли прверку</th>
+                <th scope="col">Горячая вода</th>
+                <th scope="col">Холодная вода</th>
+                
+            </tr>
+            </thead>
+            <tbody align="center" class="tbody-striped"  style= "font-size:small">
+            {% for f in fio %}
+            {% comment %} {% ifequal rec.fio_worker user.last_name %}   {% endcomment %}
+            <tr>
+            
+            <td>{{ forloop.counter }}</td>
+                <td>{{f.0}}</td>
+                <td>{{f.1}}</td>
+                <td>{{f.2 }}</td>
+                <td>{{f.3}}</td>
+                <td>{{f.4}}</td>
+                
+              
+                
+                
+            </tr>
+            {% comment %} {% endifequal %} {% endcomment %}
+            {% endfor %}
+            </tbody>
+            </table>
+        
+<center>
+{% if is_paginated %}
+  <nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item {% if not prev_url %} disabled{% endif %}">
+      <a class="page-link" href="{{prev_url}}" tabindex="-1" aria-disabled="true">Previous</a>
+    </li>
+                {% for n in main.paginator.page_range  %}
+
+                {% if main.number == n %}
+                <li class="page-item active" aria-current="page">
+                <a class="page-link" href="?page={{n}}">{{n}} <span class="sr-only">(current)</span></a>
+                </li>
+            
+                {% elif n > main.number|add:-3 and  n < main.number|add:3 %}
+                <li class="page-item">
+                <a class="page-link" href="?page={{n}}">{{n}}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+    <li class="page-item {% if not next_url %} disabled{% endif %}">
+      <a class="page-link " href="{{next_url}}">Next</a>
+    </li>
+  </ul>
+</nav>
+{% endif %}
+
+
+{% else %}
+    Вам необходимо войти в систему
+{% endif %}
+{% endblock content %}

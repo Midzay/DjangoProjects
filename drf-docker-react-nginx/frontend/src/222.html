@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        fieldset {
+            width: 800px;
+            margin: 20px auto;
+            text-align: center;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        #input-task:focus {
+            color: #000000;
+            border: 1px solid red
+        }
+
+        legend {
+            font-size: 120%;
+            text-align: left;
+            color: #1500d6;
+
+        }
+
+        .matrix {
+
+            width: 800px;
+            margin: 20px auto;
+            border-radius: 10px;
+
+        }
+
+        .row {
+            text-align: center;
+            height: 400px;
+            width: 100%;
+            margin: 10px auto;
+
+        }
+
+        .row>* {
+            display: inline-block;
+            border-width: 1px;
+            border-style: solid;
+            width: 48%;
+            height: 100%;
+            border-radius: 5px;
+            margin: 2px;
+            overflow: auto;
+        }
+
+        .submit:hover {
+            color: red;
+        }
+
+        .submit:focus {
+            border-color: red;
+        }
+
+        .select:focus {
+            border-color: red;
+        }
+
+        .select,
+        .submit,
+        #input-task {
+            font-size: 120%;
+            border-radius: 5px;
+            outline: none;
+            background: #ffffff !important;
+            border: 1px solid #292929;
+        }
+
+        .title-element {
+            font-size: 120%;
+            color: #1500d6;
+        }
+
+        .btn {
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 5px;
+            border-color: black;
+        }
+
+        .ok {
+            background: rgb(94, 156, 1);
+        }
+
+        .edit {
+            background: rgb(84, 123, 230);
+        }
+
+        .del {
+            background: rgb(240, 142, 142);
+        }
+
+        .text-task {
+            text-align: left;
+            float: left;
+            margin-top: 10px;
+        }
+
+        .button-block-task {
+            clear: left;
+            text-align: right;
+            margin-bottom: 5px;
+        }
+
+        .task {
+            border-color: #000000;
+            border-bottom: 1px solid black;
+            margin: 5px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="create-task">
+            <form action="">
+                <fieldset>
+                    <legend>Задачи для матрицы Эйзенхауэра</legend>
+                    <label for="input-task">Задача</label>
+                    <input type="text" id="input-task" name="task" required>
+                    <select name="one" id="select-task" class="select">
+                        <option value="vajsroch">Важно-Срочно</option>
+                        <option value="vajsroch">Важно-Не срочно</option>
+                        <option value="vajsroch">Не Важно-Срочно</option>
+                        <option value="vajsroch">Не важно-Не срочно</option>
+                    </select>
+                    <input class="submit" type="submit" value="Создать">
+            </form>
+            </fieldset>
+        </div>
+
+        <div class="matrix">
+            <div class="row">
+                <div class="element-top-left">
+                    <div class="title-element">Важно-Срочно</div>
+                    <div class="task">
+                        <div class="text-task">dsfsfsdfdsfsdfdsfs dfsdsdfsserterterterterter ert er tre re er tzfsf
+                        </div>
+                        <div class="button-block-task">
+                            <button class="btn ok">OK</button>
+                            <button class="btn edit">Edit</button>
+                            <button class="btn del">Del</button>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="element-top-right">
+                    <div class="title-element">Важно-Не срочно</div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="element-bottom-left">
+                    <div class="title-element">Не Важно-Срочно</div>
+
+                    <div class="task"></div>
+                </div>
+                <div class="element-bottom-right">
+                    <div class="title-element">Не Важно-Не Срочно</div>
+
+                    <div class="task"></div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    </div>
+
+
+
+</body>
+
+</html>
